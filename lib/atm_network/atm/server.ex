@@ -2,11 +2,10 @@ defmodule AtmNetwork.Atm.Server do
   use GenServer
 
   def start_link(state_pid, name) do
-    IO.puts "starting #{name}"
-    GenServer.start_link(__MODULE__, [state_pid, name], name: via_tuple(name))
+    GenServer.start_link(__MODULE__, state_pid, name: via_tuple(name))
   end
 
-  def init(state_pid, name) do
+  def init(state_pid) do
     payload = AtmNetwork.AtmStateServer.get_payload(state_pid)
     {:ok, {payload, state_pid}}
   end
@@ -44,7 +43,7 @@ defmodule AtmNetwork.Atm.Server do
   end
   ###
 
-  def handle_call({:current_payload}, _, {payload, state_pid} = state) do
+  def handle_call({:current_payload}, _, {payload, _} = state) do
     {
       :reply,
       payload,
@@ -62,7 +61,7 @@ defmodule AtmNetwork.Atm.Server do
     end
   end
 
-  def handle_cast({:put, cache}, {payload, state_pid} = state) do
+  def handle_cast({:put, cache}, {payload, state_pid}) do
     new_payload = AtmNetwork.Payload.add(payload, cache)
     AtmNetwork.AtmStateServer.save_payload(state_pid, new_payload)
     {
@@ -71,7 +70,7 @@ defmodule AtmNetwork.Atm.Server do
     }
   end
 
-  def handle_cast({:clean}, {payload, state_pid} = state) do
+  def handle_cast({:clean}, {_, state_pid}) do
     AtmNetwork.Atm.StateServer.save_payload(state_pid, AtmNetwork.Payload.new)
     {
       :noreply,
