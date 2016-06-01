@@ -19,6 +19,14 @@ defmodule AtmNetwork.Payload do
     %AtmNetwork.Payload{payload: response}
   end
 
+  def add(%AtmNetwork.Payload{} = base, [first | other]) do
+    base |> add(first) |> add(other)
+  end
+
+  def add(%AtmNetwork.Payload{} = base, [first]) do
+    add(base, first)
+  end
+
   def remove(%AtmNetwork.Payload{payload: payload}, {in_value, in_amount}) do
     response = Enum.map(payload, fn {value, amount} ->
       if value == in_value, do: amount = amount - in_amount
@@ -28,25 +36,17 @@ defmodule AtmNetwork.Payload do
   end
 
   def payload_valid?(%AtmNetwork.Payload{payload: payload}) do
-    !Enum.find(payload, false, fn { _ , amount} -> amount < 0 end)
+    !Enum.find(payload, false, fn {_ , amount} -> amount < 0 end)
   end
 
   def exchange(%AtmNetwork.Payload{payload: payload} = base, exchange_amount) do
     payload
-      |> calc_value_factor
-      |> count_cache_exchange(exchange_amount)
+      |> count_cache_exchange(exchange_amount, [])
       |> format_answer(base)
   end
 
-  #### Private
 
-  def calc_value_factor(payload) do
-    total_cache = payload |> Stream.map(fn {value, amount} -> value * amount end) |> Enum.sum
-    payload |> Stream.map(fn {value, amount} -> {value, amount, (value*amount*amount)/total_cache} end)
-      |> Enum.sort(fn {_,_,k1}, {_,_,k2}  -> k1 > k2 end)
-  end
-
-  defp count_cache_exchange([{value, amount, _}| tl], exchange_left, acc \\ []) do
+  defp count_cache_exchange([{value, amount}| tl], exchange_left, acc) do
     k = exchange_left/value
     ceil_amount = k |> Float.ceil |> round
     result_value_amount = if amount >= ceil_amount, do: ceil_amount, else: amount

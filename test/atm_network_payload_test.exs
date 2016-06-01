@@ -36,7 +36,7 @@ defmodule AtmNetwork.PayloadTest do
 
   test "exchange success" do
      {:ok, left, exchanged} = AtmNetwork.Payload.new([{1, 5}]) |> AtmNetwork.Payload.exchange(2)
-     assert exchanged == [{1, 2}, {100, 0}, {50, 0}, {20, 0}, {10, 0}, {5, 0}, {2, 0}]
+     assert exchanged == [{1, 2}, {2, 0}, {5, 0}, {10, 0}, {20, 0}, {50, 0}, {100, 0}]
      assert left == %AtmNetwork.Payload{payload: [{1, 3}, {2, 0}, {5, 0}, {10, 0}, {20, 0}, {50, 0}, {100, 0}]}
   end
 
