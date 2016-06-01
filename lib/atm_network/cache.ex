@@ -2,8 +2,6 @@ defmodule AtmNetwork.Cache do
   use GenServer
 
   def start_link do
-    IO.puts "Starting atms cache."
-
     GenServer.start_link(__MODULE__, nil, name: :atms_cache)
   end
 
@@ -16,6 +14,7 @@ defmodule AtmNetwork.Cache do
   end
 
   def all do
+    # TODO: Do more accurate select
     registered_processes = :gproc.select({:all, :all}, [{:_, [], [:"$$"]}])
     for [{:n, :l,{:atm, name}}, pid, _] <- registered_processes, into: [] do
       {name, pid}

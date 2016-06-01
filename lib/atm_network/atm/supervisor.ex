@@ -2,7 +2,6 @@ defmodule AtmNetwork.Atm.Supervisor do
   use Supervisor
 
   def start_link(atm_name) do
-    IO.puts "Starting at"
     {:ok, sup_pid} = Supervisor.start_link(__MODULE__, nil)
     start_workers(sup_pid, atm_name)
   end

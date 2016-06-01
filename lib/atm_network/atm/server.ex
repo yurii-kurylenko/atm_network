@@ -35,6 +35,10 @@ defmodule AtmNetwork.Atm.Server do
     :gproc.whereis_name({:n, :l, {:atm, name}})
   end
 
+  def all do
+
+  end
+
   def shutdown(atm) do
     GenServer.cast(atm, {:shutdown})
   end
@@ -83,7 +87,3 @@ defmodule AtmNetwork.Atm.Server do
   def handle_info(_, state), do: {:noreply, state}
 
 end
-
-# AtmNetwork.Server.start
-# AtmNetwork.Server.put({1, 1})
-# AtmNetwork.Server.current_payload

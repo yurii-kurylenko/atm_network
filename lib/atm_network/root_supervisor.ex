@@ -2,7 +2,6 @@ defmodule AtmNetwork.RootSupervisor do
   use Supervisor
 
   def start_link do
-    IO.puts "starting RootSupervisor"
     Supervisor.start_link(__MODULE__, nil, name: :root_atm_supervisor)
   end
 
