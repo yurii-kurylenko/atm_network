@@ -7,6 +7,6 @@ defmodule AtmNetwork.Atm.ServerSupervisor do
   end
 
   def init {state_pid, atm_name} do
-    supervise [worker(AtmNetwork.Atm.Server, [state_pid, atm_name])], strategy: :one_for_one
+    supervise [worker(AtmNetwork.Atm.Server, [state_pid, atm_name], restart: :transient)], strategy: :one_for_one
   end
 end

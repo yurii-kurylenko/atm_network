@@ -5,8 +5,8 @@ defmodule AtmNetwork.PayloadTest do
     assert AtmNetwork.Payload.new == %AtmNetwork.Payload{
       payload: [{1, 0}, {2, 0}, {5, 0}, {10, 0}, {20, 0}, {50, 0}, {100, 0}]
     }
-    assert AtmNetwork.Payload.new([{1, 2}]) == %AtmNetwork.Payload{
-      payload: [{1, 2}, {2, 0}, {5, 0}, {10, 0}, {20, 0}, {50, 0}, {100, 0}]
+    assert AtmNetwork.Payload.new([{1, 2}, {2, 3}]) == %AtmNetwork.Payload{
+      payload: [{1, 2}, {2, 3}, {5, 0}, {10, 0}, {20, 0}, {50, 0}, {100, 0}]
     }
   end
 

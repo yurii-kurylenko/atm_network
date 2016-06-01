@@ -4,11 +4,7 @@ defmodule AtmNetwork.Payload do
 
   def new(input_payload \\ []) do
     initial_payload = for x <- @available_values, into: [], do: {x, 0}
-    Enum.reduce(
-      input_payload,
-      %AtmNetwork.Payload{payload: initial_payload},
-      &add(&2, &1)
-    )
+    add(%AtmNetwork.Payload{payload: initial_payload}, input_payload)
   end
 
   def add(%AtmNetwork.Payload{payload: payload}, {in_value, in_amount}) do
@@ -23,8 +19,8 @@ defmodule AtmNetwork.Payload do
     base |> add(first) |> add(other)
   end
 
-  def add(%AtmNetwork.Payload{} = base, [first]) do
-    add(base, first)
+  def add(%AtmNetwork.Payload{} = base, []) do
+    base
   end
 
   def remove(%AtmNetwork.Payload{payload: payload}, {in_value, in_amount}) do

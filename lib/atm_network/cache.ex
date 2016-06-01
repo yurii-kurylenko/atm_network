@@ -15,6 +15,13 @@ defmodule AtmNetwork.Cache do
     end
   end
 
+  def all do
+    registered_processes = :gproc.select({:all, :all}, [{:_, [], [:"$$"]}])
+    for [{:n, :l,{:atm, name}}, pid, _] <- registered_processes, into: [] do
+      {name, pid}
+    end
+  end
+
   def init(_) do
     {:ok, nil}
   end
