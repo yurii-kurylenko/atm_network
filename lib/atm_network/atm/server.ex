@@ -6,7 +6,7 @@ defmodule AtmNetwork.Atm.Server do
   end
 
   def init(state_pid) do
-    payload = AtmNetwork.AtmStateServer.get_payload(state_pid)
+    payload = AtmNetwork.Atm.StateServer.get_payload(state_pid)
     {:ok, {payload, state_pid}}
   end
 
@@ -32,10 +32,6 @@ defmodule AtmNetwork.Atm.Server do
 
   def whereis(name) do
     :gproc.whereis_name({:n, :l, {:atm, name}})
-  end
-
-  def all do
-
   end
 
   def shutdown(atm) do
