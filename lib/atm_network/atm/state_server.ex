@@ -1,12 +1,13 @@
 defmodule AtmNetwork.Atm.StateServer do
   use GenServer
+  alias AtmNetwork.Payload, as: Payload
 
   def start_link() do
     {:ok,_pid} = GenServer.start_link(__MODULE__, nil)
   end
 
   def init(_) do
-    {:ok, AtmNetwork.Payload.new}
+    {:ok, Payload.new}
   end
 
   def save_payload(pid, value) do
@@ -21,7 +22,11 @@ defmodule AtmNetwork.Atm.StateServer do
     {:reply, current_value, current_value}
   end
 
-  def handle_cast({:save_payload, value}, _current_value) do
+  def handle_cast({:save_payload, value}, current) do
+    [current, value]
+      |> Enum.map(&(Payload.sum(&1)))
+      |> Enum.reduce(&-/2)
+      |> AtmNetwork.CounterServer.add
     {:noreply, value}
   end
 end

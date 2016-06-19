@@ -8,7 +8,8 @@ defmodule AtmNetwork.RootSupervisor do
   def init(_) do
     processes = [
       supervisor(AtmNetwork.Atm.AtmsPoolSupervisor, []),
-      worker(AtmNetwork.Cache, [])
+      worker(AtmNetwork.Cache, []),
+      worker(AtmNetwork.CounterServer, [])
     ]
 
     supervise(processes, strategy: :one_for_one)

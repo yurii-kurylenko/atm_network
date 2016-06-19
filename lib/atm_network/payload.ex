@@ -41,6 +41,9 @@ defmodule AtmNetwork.Payload do
       |> format_answer(base)
   end
 
+  def sum(%AtmNetwork.Payload{payload: payload}) do
+    payload |> Enum.reduce(0, fn {value, amount}, acc -> value*amount + acc end)
+  end
 
   defp count_cache_exchange([{value, amount}| tl], exchange_left, acc) do
     k = exchange_left/value

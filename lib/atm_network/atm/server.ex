@@ -1,5 +1,6 @@
 defmodule AtmNetwork.Atm.Server do
   use GenServer
+  alias AtmNetwork.Payload, as: Payload
 
   def start_link(state_pid, name) do
     GenServer.start_link(__MODULE__, state_pid, name: via_tuple(name))
@@ -48,9 +49,9 @@ defmodule AtmNetwork.Atm.Server do
   end
 
   def handle_call({:exchange, amount}, _, {payload, state_pid} = state) do
-    case AtmNetwork.Payload.exchange(payload, amount) do
+    case Payload.exchange(payload, amount) do
       {:ok, left, exchanged} ->
-        AtmNetwork.AtmStateServer.save_payload(state_pid, left)
+        AtmNetwork.Atm.StateServer.save_payload(state_pid, left)
         {:reply, {exchanged, left}, {left, state_pid}}
       {:error, reason} ->
         {:reply, reason, state}
@@ -58,8 +59,8 @@ defmodule AtmNetwork.Atm.Server do
   end
 
   def handle_cast({:put, cache}, {payload, state_pid}) do
-    new_payload = AtmNetwork.Payload.add(payload, cache)
-    AtmNetwork.AtmStateServer.save_payload(state_pid, new_payload)
+    new_payload = Payload.add(payload, cache)
+    AtmNetwork.Atm.StateServer.save_payload(state_pid, new_payload)
     {
       :noreply,
       {new_payload, state_pid}
@@ -67,10 +68,10 @@ defmodule AtmNetwork.Atm.Server do
   end
 
   def handle_cast({:clean}, {_, state_pid}) do
-    AtmNetwork.Atm.StateServer.save_payload(state_pid, AtmNetwork.Payload.new)
+    AtmNetwork.Atm.StateServer.save_payload(state_pid, Payload.new)
     {
       :noreply,
-      AtmNetwork.Payload.new
+      Payload.new
     }
   end
 
