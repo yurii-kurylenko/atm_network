@@ -10,9 +10,7 @@ defmodule AtmNetwork.PayloadList do
     payloads |> add(first) |> join(others)
   end
 
-  def join(base, []) do
-    base
-  end
+  def join(base, []), do: base
 
   def add(base_payload_list, new_payload) do
     add(base_payload_list, new_payload, [])

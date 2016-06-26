@@ -21,9 +21,7 @@ defmodule AtmNetwork.Cache do
     end
   end
 
-  def init(_) do
-    {:ok, nil}
-  end
+  def init(_), do: {:ok, nil}
 
   def handle_call({:server_process, atm_name}, _, state) do
     atm_pid = case AtmNetwork.Atm.Server.whereis(atm_name) do
