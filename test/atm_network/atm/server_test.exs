@@ -4,7 +4,7 @@ defmodule AtmNetwork.Atm.ServerTest do
   alias AtmNetwork.Atm.StateServer, as: StateServer
   alias AtmNetwork.Payload, as: Payload
 
-  # TODO: refactoring
+  # TODO: write normal tests
   test "#all" do
     {_, st} = AtmNetwork.Atm.StateServer.start_link()
     {_, sr} = AtmNetwork.Atm.Server.start_link(st, "11")
