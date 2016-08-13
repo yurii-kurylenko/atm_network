@@ -14,8 +14,7 @@ defmodule AtmNetwork.Cache do
   end
 
   def all do
-    # TODO: Do more accurate select
-    registered_processes = :gproc.select({:all, :all}, [{:_, [], [:"$$"]}])
+    registered_processes = :gproc.select([{{{:"n", :"l", {:"atm", :"_"}}, :"_", :"_"}, [], [:"$$"]}])
     for [{:n, :l,{:atm, name}}, pid, _] <- registered_processes, into: [] do
       {name, pid}
     end
